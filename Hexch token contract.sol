@@ -107,14 +107,14 @@ contract StandardBurnERC20Token {
 
     function burnFrom(address _from, uint256 _value) public {
         require(_allowances[_from][msg.sender] >= _value, "ERC20: burn amount exceeds allowance");
-        _burn(msg.sender, _value);
+        _burn(_from, _value);
         _allowances[_from][msg.sender] = _allowances[_from][msg.sender].sub(_value);
         emit Transfer(_from, address(0), _value);
     }
 
 
-    function transferArray(address[] memory _to, uint256[] memory _value) public {
-        require(_to.length == _value.length);
+    function transferArray(address[] calldata _to, uint256[] calldata _value) external {
+        require(_to.length == _value.length, 'ERC20: array length is not the same');
         uint256 sum = 0;
         for (uint256 i = 0; i < _value.length; i++) {
             sum = sum.add(_value[i]);
